@@ -168,7 +168,7 @@ class Trace:
 
     def get_root_span(self):
         """Return the root-span of a trace"""
-        root = list(filter(lambda span: span.type == span.SPAN_TYPE_ROOT, self.spans))
+        root = list(filter(lambda span: span.type == span_def.SPAN_TYPE_ROOT, self.spans))
 
         if len(root) > 1:
             raise ValueError("Found multiple root spans. Analysis should be done manually")
@@ -188,8 +188,8 @@ class Trace:
         Resolves the string-based reference of a span
         to point to the span instance of the reference.
         """
-        ref_id = reference.get(span.SPAN_ID)
-        ref_type = reference.get(span.REF_TYPE_KEY)
+        ref_id = reference.get(span_def.SPAN_ID)
+        ref_type = reference.get(span_def.REF_TYPE_KEY)
         parent = list(filter(lambda span: span.span_id == ref_id, self.spans))
 
         if len(parent) > 1:
@@ -197,9 +197,9 @@ class Trace:
         if len(parent) < 1:
             raise ValueError(f"Found a reference to a not existing span!: {ref_id}")
 
-        if ref_type == span.REF_TYPE_CHILD_OF:
+        if ref_type == span_def.REF_TYPE_CHILD_OF:
             parent[0].add_child(span)
-        elif ref_type == span.REF_TYPE_FOLLOWS_FROM:
+        elif ref_type == span_def.REF_TYPE_FOLLOWS_FROM:
             parent[0].add_follower(span)
 
     def order_children(self, span):
