@@ -14,7 +14,7 @@ from tracing_rca.rules.parser import get_rules
 from  tracing_rca import config
 
 
-logger = logging.getLogger("analysis.utils")
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
@@ -27,7 +27,7 @@ def analyze_traces(start_time, end_time, name, errors, failures, rules):
 
     traces_raw = parser.parse_spans(data)
 
-    logger.debug('Trace IDs: %r', list(traces_raw.keys()))
+    logger.info('Trace IDs: %r', list(traces_raw.keys()))
     traces = []
 
     for trace_id, spans in traces_raw.items():

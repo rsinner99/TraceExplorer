@@ -6,7 +6,7 @@ import unittest
 
 from .csv import write_result
 
-logger = logging.getLogger("testrunners.base")
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 class Runner(unittest.TestCase):

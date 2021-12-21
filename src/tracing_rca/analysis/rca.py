@@ -4,7 +4,7 @@ This module implements the actual root cause analysis of the tracing data.
 
 import logging
 
-logger = logging.getLogger("analysis.rca")
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
