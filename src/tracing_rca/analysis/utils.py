@@ -7,11 +7,11 @@ import pandas as pd
 
 from .models import Trace, Szenario
 from .rca import get_root_cause
-from queries import get_query
-from parsers import get_parser
-from reports.html import create_szenario_html, create_trace_html
-from rules.parser import get_rules
-import config
+from tracing_rca.queries import get_query
+from tracing_rca.parsers import get_parser
+from tracing_rca.reports.html import create_szenario_html, create_trace_html
+from tracing_rca.rules.parser import get_rules
+from  tracing_rca import config
 
 
 logger = logging.getLogger("analysis.utils")

@@ -1,7 +1,7 @@
 """
 This module helps to import the correct query module for the Storage-Backend.
 """
-from config import DB_SETTINGS
+from tracing_rca.config import DB_SETTINGS
 from . import elasticsearch_helper
 
 DB_ENGINE = DB_SETTINGS.get('ENGINE')

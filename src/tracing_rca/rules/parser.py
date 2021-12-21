@@ -4,7 +4,7 @@ This module helps to parse and initialize all rules in the specified directory.
 
 import json
 import os
-from config import RULE_BASE_DIR
+from tracing_rca.config import RULE_BASE_DIR
 from .models import Rule, Condition, Action
 
 def parse(data):

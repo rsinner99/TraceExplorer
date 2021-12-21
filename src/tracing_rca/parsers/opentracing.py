@@ -5,7 +5,7 @@ This module implements a parser for the opentracing format.
 import json
 from jsonschema import validate as validate_json
 
-from config import JSON_SCHEMA_PATH
+from tracing_rca.config import JSON_SCHEMA_PATH
 
 RELEVANT_KEYS = ['operationName', 'references', 'startTime', 'duration', ]
 

@@ -6,7 +6,7 @@ Performs queries and return corresponding output as formatted in the ES-Storage-
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
-from config import DB_SETTINGS
+from tracing_rca.config import DB_SETTINGS
 
 es = Elasticsearch(
     [DB_SETTINGS.get('URL')],
