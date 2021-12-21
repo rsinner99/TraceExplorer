@@ -5,13 +5,15 @@ This module helps to start the analysis and all corresponding actions.
 import logging
 import pandas as pd
 
-from .models import Trace, Szenario
-from .rca import get_root_cause
 from tracing_rca.queries import get_query
 from tracing_rca.parsers import get_parser
 from tracing_rca.reports.html import create_szenario_html, create_trace_html
 from tracing_rca.rules.parser import get_rules
-from  tracing_rca import config
+from tracing_rca import config
+
+from .models import Trace, Szenario
+from .rca import get_root_cause
+
 
 
 logger = logging.getLogger(__name__)
@@ -50,9 +52,10 @@ def analyze_traces(start_time, end_time, name, errors, failures, rules):
 
 
 def read_csv_and_analyze():
+    """Helper function to read csv and trigger analysis."""
     szenarios = []
     rules = get_rules()
-    df = pd.read_csv(config.CSV_PATH, sep=';')
-    for data in df.values.tolist():
+    dataframe = pd.read_csv(config.CSV_PATH, sep=';')
+    for data in dataframe.values.tolist():
         szenarios.append(analyze_traces(data[0], data[1], data[2], data[3], data[4], rules))
     create_szenario_html(szenarios)

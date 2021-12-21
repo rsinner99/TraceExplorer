@@ -7,6 +7,7 @@ import logging
 from tracing_rca.analysis import read_csv_and_analyze
 
 def main():
+    """Main function for command line."""
     args = sys.argv
     args.pop(0)
     print(args)
