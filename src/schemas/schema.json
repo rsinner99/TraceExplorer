@@ -1,0 +1,91 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/root.json",
+    "type": "object",
+    "title": "Schema for analyzing OpenTracing Spans",
+    "description": "Should make a automatic trace analysis possible.",
+    "properties": {
+        "operationName": {
+            "description": "Name of the executed operation",
+            "type": "string"
+        },
+        "startTime": {
+            "description": "Timestamp of the spans start in Unix-Format (Microseconds)",
+            "type": "integer"
+        },
+        "duration": {
+            "description": "Duartion of the operation/ span in microseconds",
+            "type": "integer"
+        },
+        "references": {
+            "description": "References to other (related) spans",
+            "type": "array",
+            "minItems": 0,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "refType": {
+                        "description": "Describes the kind of reference",
+                        "type": "string"
+                    },
+                    "traceID": {
+                        "description": "The unique identifier for a trace",
+                        "type": "string"
+                    },
+                    "spanID": {
+                        "description": "The unique identifier for a span (at least for a specific trace)",
+                        "type": "string"
+                    }
+                },
+                "required": ["refType", "traceID", "spanID"]
+            }
+        },
+        "tags": {
+            "type": "object",
+            "properties": {
+                "component": {
+                    "description": "Framework/ Library/ etc.",
+                    "type": "string"
+                },
+                "span.kind": {
+                    "description": "Client or server",
+                    "type": "string"
+                },
+                "error": {
+                    "description": "States wheter an error was detected or not",
+                    "type": "boolean"
+                }
+            },
+            "required": []
+        },
+        "logs": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "timestamp": {
+                        "description": "Time, when the event occurred.",
+                        "type": "integer"
+                    },
+                    "fields": {
+                        "type": "object",
+                        "properties": {
+                            "event": {
+                                "description": "Type of event, e.g. error",
+                                "type": "string"
+                            },
+                            "message": {
+                                "description": "A one-line message explaining the event",
+                                "type": "string"
+                            }
+                        },
+                        "required": ["event"]
+                    }
+
+                },
+                "required": ["timestamp", "fields"]
+            }
+        }
+    },
+    "required": ["operationName", "startTime", "duration", "tags"]
+}

@@ -3,8 +3,8 @@ This module defines all models and helper functions to have an object-oriented
 representation of the data to analyze.
 """
 
-from ..definitions import tags, logs, http
-from ..definitions import span as span_def
+from definitions import tags, logs, http
+from definitions import span as span_def
 
 
 class Span:

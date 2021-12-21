@@ -2,48 +2,22 @@
 This module helps to start the analysis and all corresponding actions.
 """
 
-import os
 import logging
 import pandas as pd
-from jinja2 import Environment, FileSystemLoader
 
 from .models import Trace, Szenario
 from .rca import get_root_cause
-from ..queries import get_query
-from ..parsers import get_parser
-from ..reports.html import html_graph
-from ..rules.parser import get_rules
+from queries import get_query
+from parsers import get_parser
+from reports.html import create_szenario_html, create_trace_html
+from rules.parser import get_rules
+import config
 
 
 logger = logging.getLogger("analysis.utils")
 logger.setLevel(logging.DEBUG)
 
-root = os.path.dirname(os.path.abspath(__file__))
-templates_dir = os.path.join(root, 'templates')
-env = Environment( loader = FileSystemLoader(templates_dir) )
 
-
-def create_trace_html(traces):
-    """Creates a HTML report for each Trace in the list."""
-    for trace in traces:
-        if trace.error_count == 0:
-            continue
-        spans = sorted(trace.spans, key=lambda span: span.rating, reverse=True)
-        spans = [span.__dict__() for span in spans if span.error]
-        graph = html_graph(trace.root_span)
-        template = env.get_template('spans.html')
-        output = template.render(spans=spans, trace=trace.__dict__(), graph=graph)
-        with open(trace.filename, 'w', encoding='utf-8') as file:
-            file.write(output)
-
-def create_szenario_html(szenarios):
-    """Creates a file with szenarios details."""
-    result = [szenario.__dict__() for szenario in szenarios]
-    filename = 'szenario_test.html'
-    template = env.get_template('szenarios.html')
-    output = template.render(szenarios=result)
-    with open(filename, 'w', encoding='utf-8') as file:
-        file.write(output)
 
 def analyze_traces(start_time, end_time, name, errors, failures, rules):
     """Initailizes the analysis."""
@@ -78,7 +52,7 @@ def analyze_traces(start_time, end_time, name, errors, failures, rules):
 def read_csv_and_analyze():
     szenarios = []
     rules = get_rules()
-    df = pd.read_csv("test_results.csv", sep=';')
+    df = pd.read_csv(config.CSV_PATH, sep=';')
     for data in df.values.tolist():
         szenarios.append(analyze_traces(data[0], data[1], data[2], data[3], data[4], rules))
     create_szenario_html(szenarios)

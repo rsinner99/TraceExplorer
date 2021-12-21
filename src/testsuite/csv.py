@@ -4,7 +4,7 @@ which will be used for analysis afterwards.
 """
 
 import pandas as pd
-from ..config import CSV_PATH
+from config import CSV_PATH
 
 
 def write_result(result):

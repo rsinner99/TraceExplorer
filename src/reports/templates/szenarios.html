@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block content %}
+<div style="margin-top: 60px"></div>
+{% for szen in szenarios %}
+<div class="collapsible">
+    <table class="singleTab">
+        <colgroup>
+            <col class="twenty" />
+            <col class="fifty" />
+            <col class="ten" />
+            <col class="ten" />
+            <col class="ten" />
+        </colgroup>
+        <tr>
+            <td>{{ szen['class'] }}</td>
+            <td>{{ szen['name'] }}</td>
+            <td>{{ szen['duration'] }}</td>
+            <td>Traces: {{ szen['tracesCount'] }}</td>
+            <td>Errors: {{ szen['errorsCount'] }}</td>
+        </tr>
+    </table>
+</div>
+<div class="content">
+    <table>
+        <colgroup>
+            <col class="twenty" />
+            <col class="fifty" />
+            <col class="ten" />
+            <col class="ten" />
+        </colgroup>
+        {% for trace in szen['traces'] %}
+        <tr>
+            <td>Trace: </td>
+            <td>{{ trace['traceID'] }}</td>
+            <td>Errors: {{ trace['errorCount'] }}</td>
+            <td><a href="{{ trace['filename'] }}" class="button">View details</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endfor %} {% endblock %}
