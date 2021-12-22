@@ -122,6 +122,19 @@ class Span:
         return None
 
 
+    def get_caused_strand(self):
+        """
+        Return a list of related spans with errors which
+        where produced by the current span.
+        """
+        strand = []
+        if self.caused:
+            strand.extend(self.caused.get_caused_strand())
+        elif not self in strand:
+            strand.append(self)
+        return strand
+
+
 class Trace:
     """Represents a trace which was produced by an E2E-Test"""
 
@@ -212,6 +225,23 @@ class Trace:
             if i > 0:
                 child.previous = sorted_children[i-1]
             self.order_children(child)
+
+    def get_error_strands(self):
+        """
+        Return a list of independent error strands starting
+        from the most likely root-cause.
+        """
+        strands = []
+        rc_spans = list(    # filter for spans which contain an error
+            filter(         #  and did not cause errors in other spans.
+                lambda span: span.error and not span.caused_by, self.spans
+            )
+        )
+        for span in rc_spans:
+            strand = [span]
+            strand.extend([span for span in span.get_caused_strand() if not span in strand])
+            strands.append(strand)
+        return strands
 
 
 class Szenario:

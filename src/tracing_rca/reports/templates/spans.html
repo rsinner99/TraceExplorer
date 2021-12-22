@@ -38,6 +38,12 @@
         </tr>
     </table>
 </div>
+{% endfor %} {% for strand in strands %}
+<ol>
+    {% for span_cause in strand %}
+    <li>{{ span_cause }}</li>
+    {% endfor %}
+</ol>
 {% endfor %}
 <div>
     {{ graph|safe }}

@@ -19,8 +19,9 @@ def create_trace_html(traces):
         spans = sorted(trace.spans, key=lambda span: span.rating, reverse=True)
         spans = [span.__dict__() for span in spans if span.error]
         graph = html_graph(trace.root_span)
+        strands = [[span.cause for span in strand] for strand in trace.get_error_strands()]
         template = env.get_template('spans.html')
-        output = template.render(spans=spans, trace=trace.__dict__(), graph=graph)
+        output = template.render(spans=spans, trace=trace.__dict__(), graph=graph, strands=strands)
         with open(trace.filename, 'w', encoding='utf-8') as file:
             file.write(output)
 
