@@ -2,10 +2,10 @@
 This module defines all models and helper functions to have an object-oriented
 representation of the data to analyze.
 """
+import re
 
 from tracing_rca.definitions import tags, logs, http
 from tracing_rca.definitions import span as span_def
-
 
 class Span:
     """Represents a span within a trace which was produced by an E2E-Test"""
@@ -261,9 +261,18 @@ class Szenario:
             'failures': self.failures,
             'traces': traces_with_error,
             'tracesCount': len(self.traces),
-            'errorsCount': len(traces_with_error)
+            'errorsCount': len(traces_with_error),
+            'test_error': self.has_error(),
+            'test_failed': self.has_failed()
         }
 
     def add_trace(self, trace: Trace):
         """Adding a trace to the list of traces in the szenario."""
         self.traces.append(trace)
+
+    def has_error(self):
+        return not bool(re.match(r'^\[\]$', self.errors))
+
+    def has_failed(self):
+        return not bool(re.match(r'^\[\]$', self.failures))
+            

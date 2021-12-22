@@ -1,40 +1,73 @@
 {% extends "base.html" %} {% block content %}
 <div style="margin-top: 60px"></div>
-{% for szen in szenarios %}
-<div class="collapsible">
+<div class="collapsible" style="background-color: C8CEE1">
     <table class="singleTab">
         <colgroup>
             <col class="twenty" />
-            <col class="fifty" />
-            <col class="ten" />
-            <col class="ten" />
-            <col class="ten" />
-        </colgroup>
-        <tr>
-            <td>{{ szen['class'] }}</td>
-            <td>{{ szen['name'] }}</td>
-            <td>{{ szen['duration'] }}</td>
-            <td>Traces: {{ szen['tracesCount'] }}</td>
-            <td>Errors: {{ szen['errorsCount'] }}</td>
-        </tr>
-    </table>
-</div>
-<div class="content">
-    <table>
-        <colgroup>
             <col class="twenty" />
-            <col class="fifty" />
+            <col class="ten" />
+            <col class="ten" />
+            <col class="ten" />
             <col class="ten" />
             <col class="ten" />
         </colgroup>
-        {% for trace in szen['traces'] %}
         <tr>
-            <td>Trace: </td>
-            <td>{{ trace['traceID'] }}</td>
-            <td>Errors: {{ trace['errorCount'] }}</td>
-            <td><a href="{{ trace['filename'] }}" class="button">View details</a></td>
+            <td>Test class</td>
+            <td>Test name</td>
+            <td>Passed</td>
+            <td>Comment</td>
+            <td></td>
+            <td>Traces</td>
+            <td>Errors</td>
         </tr>
-        {% endfor %}
     </table>
 </div>
-{% endfor %} {% endblock %}
+{% for szen in szenarios %} {% if szen['errorsCount'] > 0 %}
+<div class="collapsible" style="background-color: ff7b5a;">
+    {% else %}
+    <div class="collapsible" style="background-color: 8eb48b;">
+        {% endif %}
+        <table class="singleTab">
+            <colgroup>
+                <col class="twenty" />
+                <col class="twenty" />
+                <col class="ten" />
+                <col class="ten" />
+                <col class="ten" />
+                <col class="ten" />
+                <col class="ten" />
+            </colgroup>
+            <tr>
+                <td>{{ szen['class'] }}</td>
+                <td>{{ szen['name'] }}</td>
+                <td>{% if szen['test_failed'] %}
+                    <span class="glyphicon glyphicon-remove"></span> {% else %}
+                    <span class="glyphicon glyphicon-ok"></span> {% endif %}
+                </td>
+                <td>{% if szen['test_error'] %}Test runtime error{% endif %}
+                </td>
+                <td>{{ szen['duration'] }}</td>
+                <td><span align="left" class="glyphicon glyphicon-search"></span> {{ szen['tracesCount'] }}</td>
+                <td><span align="left" class="glyphicon glyphicon-exclamation-sign"></span> {{ szen['errorsCount'] }}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="content">
+        <table>
+            <colgroup>
+                <col class="twenty" />
+                <col class="fifty" />
+                <col class="ten" />
+                <col class="ten" />
+            </colgroup>
+            {% for trace in szen['traces'] %}
+            <tr>
+                <td>Trace: </td>
+                <td>{{ trace['traceID'] }}</td>
+                <td>Errors: {{ trace['errorCount'] }}</td>
+                <td><a href="{{ trace['filename'] }}" class="button">View details</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endfor %} {% endblock %}
