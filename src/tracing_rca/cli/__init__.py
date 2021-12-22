@@ -6,13 +6,22 @@ import sys
 import logging
 from tracing_rca.analysis import read_csv_and_analyze
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+stdout_handler = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s', '%m-%d-%Y %H:%M:%S')
+
 def main():
     """Main function for command line."""
     args = sys.argv
     args.pop(0)
-    print(args)
+    
     if '-v' in args:
-        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+        stdout_handler.setLevel(logging.DEBUG)
     else:
-        logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+        stdout_handler.setLevel(logging.INFO)
+    stdout_handler.setFormatter(formatter)
+    logger.addHandler(stdout_handler)
+    
     read_csv_and_analyze()
