@@ -6,29 +6,31 @@ of the hierarchical span structure in html.
 import os
 from jinja2 import Environment, FileSystemLoader
 
+from tracing_rca.config import REPORT_DIR
+
 root = os.path.dirname(os.path.abspath(__file__))
 templates_dir = os.path.join(root, 'templates')
 env = Environment( loader = FileSystemLoader(templates_dir) )
-
 
 def create_trace_html(traces):
     """Creates a HTML report for each Trace in the list."""
     for trace in traces:
         if trace.error_count == 0:
             continue
+        filename = os.path.join(REPORT_DIR, trace.filename)
         spans = sorted(trace.spans, key=lambda span: span.rating, reverse=True)
         spans = [span.__dict__() for span in spans if span.error]
         graph = html_graph(trace.root_span)
         strands = [[span.cause for span in strand] for strand in trace.get_error_strands()]
         template = env.get_template('spans.html')
         output = template.render(spans=spans, trace=trace.__dict__(), graph=graph, strands=strands)
-        with open(trace.filename, 'w', encoding='utf-8') as file:
+        with open(filename, 'w', encoding='utf-8') as file:
             file.write(output)
 
 def create_szenario_html(szenarios):
     """Creates a file with szenarios details."""
     result = [szenario.__dict__() for szenario in szenarios]
-    filename = 'szenarios.html'
+    filename = os.path.join(REPORT_DIR, 'szenarios.html')
     template = env.get_template('szenarios.html')
     output = template.render(szenarios=result)
     with open(filename, 'w', encoding='utf-8') as file:
