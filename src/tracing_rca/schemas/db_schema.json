@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/http_schema.json",
+    "type": "object",
+    "title": "Schema for tag fields in OpenTracing Spans",
+    "description": "Should make a automatic trace analysis possible.",
+    "properties": {
+        "component": {
+            "description": "Framework/ Library/ etc.",
+            "type": "string"
+        },
+        "span.kind": {
+            "description": "Client or server",
+            "type": "string"
+        },
+        "error": {
+            "description": "States wheter an error was detected or not",
+            "type": "boolean"
+        },
+        "db.instance": {
+            "description": "The db instance which the queries where sent to.",
+            "type": "string"
+        },
+        "db.type": {
+            "description": "Type of database, e.g. sql",
+            "type": "string"
+        },
+        "db.statement": {
+            "description": "Query statement. For sql, e.g. 'SELECT * FROM users;'",
+            "type": "string"
+        }
+    },
+    "required": ["component", "span.kind", "db.instance", "db.type", "db.statement"]
+}

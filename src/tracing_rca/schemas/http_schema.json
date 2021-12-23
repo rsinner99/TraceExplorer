@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/http_schema.json",
+    "type": "object",
+    "title": "Schema for tag fields in OpenTracing Spans",
+    "description": "Should make a automatic trace analysis possible.",
+    "properties": {
+        "component": {
+            "description": "Framework/ Library/ etc.",
+            "type": "string"
+        },
+        "span.kind": {
+            "description": "Client or server",
+            "type": "string"
+        },
+        "error": {
+            "description": "States wheter an error was detected or not",
+            "type": "boolean"
+        },
+        "http.status_code": {
+            "description": "HTTP Status-Code which was produced or received by the span.",
+            "type": "integer"
+        },
+        "http.url": {
+            "description": "The url of the http request",
+            "type": "string"
+        }
+    },
+    "required": ["component", "span.kind", "http.status_code", "http.url"]
+}
