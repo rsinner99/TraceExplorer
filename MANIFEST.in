@@ -1,0 +1,3 @@
+include schema/*.json
+include rules/*.json
+include reports/templates/*.html

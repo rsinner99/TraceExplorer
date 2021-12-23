@@ -275,4 +275,3 @@ class Szenario:
 
     def has_failed(self):
         return not bool(re.match(r'^\[\]$', self.failures))
-            

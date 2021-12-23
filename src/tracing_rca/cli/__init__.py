@@ -16,12 +16,12 @@ def main():
     """Main function for command line."""
     args = sys.argv
     args.pop(0)
-    
+
     if '-v' in args:
         stdout_handler.setLevel(logging.DEBUG)
     else:
         stdout_handler.setLevel(logging.INFO)
     stdout_handler.setFormatter(formatter)
     logger.addHandler(stdout_handler)
-    
+
     read_csv_and_analyze()
