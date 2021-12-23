@@ -14,4 +14,4 @@ def write_result(result):
 
     with open(CSV_PATH, 'a', encoding='utf-8') as file:
         # -1: otherwise there will be two linebreaks in the csv per row entries
-        file.write(csv[:-1])
+        file.write(csv)
