@@ -10,6 +10,11 @@
                 "location": "tags",
                 "field": "span.kind",
                 "match": "client"
+            },
+            {
+                "location": "tags",
+                "field": "peer.location",
+                "match": "internal"
             }
         ],
         "actions": [{

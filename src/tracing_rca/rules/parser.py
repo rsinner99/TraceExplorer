@@ -2,10 +2,14 @@
 This module helps to parse and initialize all rules in the specified directory.
 """
 
+import logging
 import json
 import os
 from tracing_rca.config import RULE_BASE_DIR
 from .models import Rule, Condition, Action
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 def parse(data):
     """Returns a list of rule object from the raw list of rules."""
@@ -29,4 +33,5 @@ def get_rules():
         if filename.endswith('.json'):
             with open(os.path.join(RULE_BASE_DIR, filename), 'r', encoding='utf-8') as file:
                 rules.extend(parse(file.read()))
+    logger.info('Found %r rules in the specified directory.', len(rules))
     return rules
