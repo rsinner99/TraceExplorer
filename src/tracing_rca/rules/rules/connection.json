@@ -1,0 +1,22 @@
+{
+    "connectionError": {
+        "category": "connection",
+        "conditions": [{
+                "location": "logs",
+                "field": "message",
+                "match": ".*Connection refused.*"
+            },
+            {
+                "location": "tags",
+                "field": "span.kind",
+                "match": "client"
+            }
+        ],
+        "actions": [{
+            "type": "self",
+            "match": [],
+            "cause": "Connection refused while trying to connect to {tags:http.url}. Please check if service is active and connection possible.",
+            "error": true
+        }]
+    }
+}

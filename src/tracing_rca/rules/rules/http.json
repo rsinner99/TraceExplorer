@@ -1,0 +1,26 @@
+{
+    "http404": {
+        "category": "functional",
+        "conditions": [{
+            "location": "logs",
+            "field": "message",
+            "match": ".*Not found.*"
+        }],
+        "actions": [{
+            "type": "children",
+            "match": [{
+                    "location": "tags",
+                    "field": "http.status_code",
+                    "match": "404"
+                },
+                {
+                    "location": "tags",
+                    "field": "span.kind",
+                    "match": "server"
+                }
+            ],
+            "cause": "Requested resource not found (HTTP 404) at {tags:http.url}. Check input parameters and error handling.",
+            "error": false
+        }]
+    }
+}

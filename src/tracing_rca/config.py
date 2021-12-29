@@ -16,7 +16,7 @@ DB_SETTINGS = {
 
 JSON_SCHEMA_PATH = os.path.join(root, os.environ.get('RCA_SCHEMA_PATH', 'schemas/schema.json'))
 
-RULE_BASE_DIR = os.path.join(root, os.environ.get('RCA_RULE_DIR', 'rules'))
+RULE_BASE_DIR = os.path.join(root, os.environ.get('RCA_RULE_DIR', 'rules/rules'))
 
 CSV_PATH = os.path.join(cwd, os.environ.get('RCA_CSV_PATH', ''))
 

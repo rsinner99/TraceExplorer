@@ -1,0 +1,27 @@
+{
+    "celeryNoWorker": {
+        "category": "worker-not-reachable",
+        "conditions": [{
+                "location": "tags",
+                "field": "span.kind",
+                "match": "client"
+            },
+            {
+                "location": "tags",
+                "field": "component",
+                "match": "Celery"
+            },
+            {
+                "location": "tags",
+                "field": "error",
+                "match": "false"
+            }
+        ],
+        "actions": [{
+            "type": "no-children",
+            "match": [],
+            "cause": "Server (service) not reachable for {tags:component} running {tags:celery.task_name}.",
+            "error": true
+        }]
+    }
+}

@@ -1,3 +1,3 @@
 include src/tracing_rca/schemas/*.json
-include src/tracing_rca/rules/*.json
+include src/tracing_rca/rules/rules/*.json
 include src/tracing_rca/reports/templates/*.html

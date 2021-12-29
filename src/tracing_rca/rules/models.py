@@ -51,6 +51,7 @@ class Action:
         for raw_condition in data["match"]:
             self.match.append(Condition(raw_condition))
         self.cause = data["cause"]
+        self.error = data.get("error", False)
 
     def prepare_cause(self, span):
         """Return a formatted cause for the failure."""
@@ -79,7 +80,7 @@ class Action:
     def check_no_children(self, span):
         """Check if span has children."""
         if len(span.children) == 0:
-            span.error = True
+            span.error = self.error
             span.cause = self.prepare_cause(span)
 
     def check_children(self, span):
@@ -92,8 +93,7 @@ class Action:
                     break
             if matched:
                 child.cause = self.prepare_cause(child)
-                # to be changed. Hier liegt ja eigentlich kein Fehler vor oder doch?!
-                child.error = True
+                child.error = self.error
             self.check_children(child)
 
     def check_parent(self, span):
@@ -106,7 +106,7 @@ class Action:
                     break
             if matched:
                 span.parent.cause = self.prepare_cause(span.parent)
-                span.parent.error = True
+                span.parent.error = self.error
 
     def check_self(self, span):
         """Perform a condition check on the span itself."""
@@ -117,4 +117,4 @@ class Action:
                 break
         if matched:
             span.cause = self.prepare_cause(span)
-            span.error = True
+            span.error = self.error
