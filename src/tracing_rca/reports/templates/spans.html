@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block header %} {{ super () }}
 <link rel="stylesheet" href="templates/tree.css"> {% endblock %} {% block content %}
 <div style="margin-top: 60px"></div>
+<h2 style="text-align: center;">Rate-based root cause analysis</h2>
 {% for span in spans %}
 <div class="collapsible">
     <table class="singleTab">
@@ -38,13 +39,16 @@
         </tr>
     </table>
 </div>
-{% endfor %} {% for strand in strands %}
+{% endfor %}
+<h2 style="text-align: center;">Chain-based root cause analysis</h2>
+{% for strand in strands %}
 <ol>
     {% for span_cause in strand %}
     <li>{{ span_cause }}</li>
     {% endfor %}
 </ol>
 {% endfor %}
+<h2 style="text-align: center;">Tree-based root cause analysis</h2>
 <div>
     {{ graph|safe }}
 </div>
