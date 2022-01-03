@@ -33,7 +33,10 @@ def analyze_traces(start_time, end_time, name, errors, failures, rules):
     traces = []
 
     for trace_id, spans in traces_raw.items():
-        traces.append(Trace(trace_id, spans))
+        try:
+            traces.append(Trace(trace_id, spans))
+        except ValueError as ve:
+            logger.error('ValueError while analyzing trace %s', trace_id, exc_info=ve)
 
     szenario = Szenario(name, errors, failures)
 
@@ -43,11 +46,9 @@ def analyze_traces(start_time, end_time, name, errors, failures, rules):
                 rule.perform(span)
             
         trace.set_error_count()
-        try:
-            get_root_cause(trace.root_span)
-            szenario.add_trace(trace)
-        except ValueError as ve:
-            logger.error('ValueError while analyzing trace %s', trace.trace_id, exc_info=ve)
+
+        get_root_cause(trace.root_span)
+        szenario.add_trace(trace)
 
     create_trace_html(traces)
     return szenario
