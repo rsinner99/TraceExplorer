@@ -41,6 +41,8 @@ def analyze_traces(start_time, end_time, name, errors, failures, rules):
         for span in trace.spans:
             for rule in rules:
                 rule.perform(span)
+            
+        trace.set_error_count()
 
         get_root_cause(trace.root_span)
 

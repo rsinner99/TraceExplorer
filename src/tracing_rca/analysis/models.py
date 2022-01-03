@@ -175,6 +175,10 @@ class Trace:
             result.append(obj)
         return result
 
+    def set_error_count(self):
+        error_spans = list(filter(lambda span: span.error, self.spans))
+        self.error_count = len(error_spans)
+
     def get_start_time(self):
         """Return the start time of the trace."""
         return self.root_span.start_time
