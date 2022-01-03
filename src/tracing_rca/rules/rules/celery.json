@@ -13,11 +13,6 @@
             },
             {
                 "location": "tags",
-                "field": "error",
-                "match": "false"
-            },
-            {
-                "location": "tags",
                 "field": "peer.location",
                 "match": "internal"
             }
