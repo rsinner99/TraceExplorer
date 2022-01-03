@@ -17,11 +17,13 @@ class Runner(unittest.TestCase):
         # Get start time of the test
         start_time = math.floor(time.time_ns() / 1e3) # microseconds: rounded down
         logger.debug('Start: %r', start_time)
+        time.sleep(1)
 
         # Perform actual test
         super().run(result)
 
         # Get end time of test
+        time.sleep(1)
         end_time = math.ceil(time.time_ns() / 1e3) # microseconds: rounded up
         logger.debug('End: %r', end_time)
 
