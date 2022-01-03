@@ -38,11 +38,11 @@ def analyze_traces(start_time, end_time, name, errors, failures, rules):
     szenario = Szenario(name, errors, failures)
 
     for trace in traces:
-        get_root_cause(trace.root_span)
-
         for span in trace.spans:
             for rule in rules:
                 rule.perform(span)
+
+        get_root_cause(trace.root_span)
 
         szenario.add_trace(trace)
 

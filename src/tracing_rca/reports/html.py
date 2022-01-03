@@ -19,7 +19,7 @@ def create_trace_html(traces):
             continue
         filename = os.path.join(REPORT_DIR, trace.filename)
         spans = sorted(trace.spans, key=lambda span: span.rating, reverse=True)
-        spans = [span.__dict__() for span in spans if span.error]
+        spans = [span.__dict__() for span in spans if span.cause]
         graph = html_graph(trace.root_span)
         strands = [[span.cause for span in strand] for strand in trace.get_error_strands()]
         template = env.get_template('spans.html')
