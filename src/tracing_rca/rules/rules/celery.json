@@ -4,12 +4,12 @@
         "conditions": [{
                 "location": "tags",
                 "field": "span.kind",
-                "match": "client"
+                "match": "(client|producer)"
             },
             {
                 "location": "tags",
                 "field": "component",
-                "match": "Celery"
+                "match": "[cC]elery"
             },
             {
                 "location": "tags",
