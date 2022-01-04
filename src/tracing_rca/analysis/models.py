@@ -186,6 +186,7 @@ class Trace:
         if span.error:
             self.error_count += 1
         self.spans.append(span)
+        return span
 
     def set_error_count(self):
         error_spans = list(filter(lambda span: span.error, self.spans))
@@ -229,7 +230,7 @@ class Trace:
                 parser = get_parser()
                 data = query.get_span_from_storage(ref_id)
                 span_dict = parser.parse_span(data)[self.trace_id]
-                self.add_span(ref_id, span_dict[ref_id])
+                parent = [self.add_span(ref_id, span_dict[ref_id])]
             except Exception as e:
                 raise e
                 raise ValueError(f"Found a reference to a not existing span!: {ref_id}")
