@@ -80,7 +80,7 @@ class Action:
     def check_no_children(self, span):
         """Check if span has children."""
         if len(span.children) == 0:
-            span.error = self.error
+            self.set_error(span)
             span.cause = self.prepare_cause(span)
 
     def check_children(self, span):
@@ -93,7 +93,7 @@ class Action:
                     break
             if matched:
                 child.cause = self.prepare_cause(child)
-                child.error = self.error
+                self.set_error(child)
             self.check_children(child)
 
     def check_parent(self, span):
@@ -106,7 +106,7 @@ class Action:
                     break
             if matched:
                 span.parent.cause = self.prepare_cause(span.parent)
-                span.parent.error = self.error
+                self.set_error(span.parent)
 
     def check_self(self, span):
         """Perform a condition check on the span itself."""
@@ -117,4 +117,10 @@ class Action:
                 break
         if matched:
             span.cause = self.prepare_cause(span)
-            span.error = self.error
+            self.set_error(span)
+
+    def set_error(self, span):
+        """Helper method to set error on span if necessary"""
+        span.error = self.error
+        if span.error:
+            span.cause_timestamp = span.start_time + span.duration

@@ -229,10 +229,9 @@ class Trace:
                 query = get_query()
                 parser = get_parser()
                 data = query.get_span_from_storage(ref_id)
-                span_dict = parser.parse_span(data)[self.trace_id]
+                span_dict = parser.parse_spans(data)[self.trace_id]
                 parent = [self.add_span(ref_id, span_dict[ref_id])]
             except Exception as e:
-                raise e
                 raise ValueError(f"Found a reference to a not existing span!: {ref_id}")
 
         if ref_type == span_def.REF_TYPE_CHILD_OF:

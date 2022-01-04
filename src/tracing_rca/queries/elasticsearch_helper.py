@@ -2,12 +2,16 @@
 This module helps to connect to any Elasticsearch instance specified in the config.
 Performs queries and return corresponding output as formatted in the ES-Storage-Backend.
 """
+import logging
 
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
 from tracing_rca.config import DB_SETTINGS
 from tracing_rca.definitions import span
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 es = Elasticsearch(
     [DB_SETTINGS.get('URL')],
@@ -140,6 +144,7 @@ def get_span_from_storage(span_id):
     """
     Returns a single span representation by its SpanID.
     """
+    logger.info('Trying to retrieve span-data for unresolved reference: %s', span_id)
     index = 'jaeger-span-' + datetime.now().strftime('%Y-%m-%d')
     query = get_single_span_query(span_id)
 
