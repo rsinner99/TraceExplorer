@@ -7,6 +7,7 @@ from datetime import datetime
 from elasticsearch import Elasticsearch
 
 from tracing_rca.config import DB_SETTINGS
+from tracing_rca.definitions import span
 
 es = Elasticsearch(
     [DB_SETTINGS.get('URL')],
@@ -21,57 +22,68 @@ HEADERS = {
 }
 
 def get_span_query(gte: int, lte: int):
-    """Return a es-query for all spans in the time range."""
+    """Return an es-query for all spans in the time range."""
     query = {
-        "query": {
-            "range": {
-                "startTime": {
-                    "gte": gte,
-                    "lte": lte
-                }
+        "range": {
+            "startTime": {
+                "gte": gte,
+                "lte": lte
             }
         }
     }
     return query
 
 def get_error_query(gte: int, lte: int):
-    """Return a es-query for all spans containing the error tag."""
+    """Return an es-query for all spans containing the error tag."""
     query = {
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "range": {
-                            "startTime": {
-                                "gte": gte,
-                                "lte": lte
-                            }
+        "bool": {
+            "must": [
+                {
+                    "range": {
+                        "startTime": {
+                            "gte": gte,
+                            "lte": lte
                         }
-                    },
-                    {
-                        "nested": {
-                            "path": "tags",
-                            "score_mode": "avg",
-                            "query": {
-                                "bool": {
-                                    "must": [
-                                        {
-                                            "match": {
-                                                "tags.key": "error"
-                                            }
-                                        },
-                                        {
-                                            "match": {
-                                                "tags.value": True
-                                            }
+                    }
+                },
+                {
+                    "nested": {
+                        "path": "tags",
+                        "score_mode": "avg",
+                        "query": {
+                            "bool": {
+                                "must": [
+                                    {
+                                        "match": {
+                                            "tags.key": "error"
                                         }
-                                    ]
-                                }
+                                    },
+                                    {
+                                        "match": {
+                                            "tags.value": True
+                                        }
+                                    }
+                                ]
                             }
                         }
                     }
-                ]
-            }
+                }
+            ]
+        }
+    }
+    return query
+
+def get_single_span_query(span_id):
+    """Returns an es-query for the given SpanID."""
+    query = {
+        "bool": {
+            "must": [
+                {
+                    "match": {
+                        "spanID": span_id
+                    }
+                }
+            ]
         }
     }
     return query
@@ -106,7 +118,7 @@ def get_spans_in_range(start: int, end: int):
         index=index,
         scroll = '2m',
         size = 1000,
-        body = query
+        query = query
     )
     sid = page['_scroll_id']
     scroll_size = page['hits']['total']
@@ -122,4 +134,22 @@ def get_spans_in_range(start: int, end: int):
         # Do something with the obtained page
         result.append(page)
 
+    return remove_elasticsearch_metadata(result)
+
+def get_span_from_storage(span_id):
+    """
+    Returns a single span representation by its SpanID.
+    """
+    index = 'jaeger-span-' + datetime.now().strftime('%Y-%m-%d')
+    query = get_single_span_query(span_id)
+
+    # Initialize the scroll
+    page = es.search(
+        index=index,
+        scroll = '2m',
+        size = 1000,
+        query = query
+    )
+
+    result = [page]
     return remove_elasticsearch_metadata(result)

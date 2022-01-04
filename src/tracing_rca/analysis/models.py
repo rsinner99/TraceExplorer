@@ -7,6 +7,9 @@ import re
 from tracing_rca.definitions import tags, logs, http
 from tracing_rca.definitions import span as span_def
 
+from tracing_rca.queries import get_query
+from tracing_rca.parsers import get_parser
+
 class Span:
     """Represents a span within a trace which was produced by an E2E-Test"""
 
@@ -175,6 +178,15 @@ class Trace:
             result.append(obj)
         return result
 
+    def add_span(self, span_id, span_data):
+        """
+        Adds a new span to the existing trace.
+        """
+        span = Span(self.trace_id, span_id, span_data)
+        if span.error:
+            self.error_count += 1
+        self.spans.append(span)
+
     def set_error_count(self):
         error_spans = list(filter(lambda span: span.error, self.spans))
         self.error_count = len(error_spans)
@@ -212,7 +224,15 @@ class Trace:
         if len(parent) > 1:
             raise ValueError("Found spans with same ID. SpanIDs have to be unique!")
         if len(parent) < 1:
-            raise ValueError(f"Found a reference to a not existing span!: {ref_id}")
+            try:
+                query = get_query()
+                parser = get_parser()
+                data = query.get_span_from_storage(ref_id)
+                span_dict = parser.parse_span(data)[self.trace_id]
+                self.add_span(ref_id, span_dict[ref_id])
+            except Exception as e:
+                raise e
+                raise ValueError(f"Found a reference to a not existing span!: {ref_id}")
 
         if ref_type == span_def.REF_TYPE_CHILD_OF:
             parent[0].add_child(span)
