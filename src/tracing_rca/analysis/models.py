@@ -88,7 +88,7 @@ class Span:
             if self.parent is None:
                 self.parent = parent
             else:
-                raise Exception('Circular dependency detected')
+                raise ValueError('Circular dependency detected')
         else:
             raise TypeError(f"Input must be of type 'Span' not {str(type(parent))}")
 
