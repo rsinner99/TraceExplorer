@@ -9,7 +9,7 @@ cwd = os.getcwd()
 
 DB_SETTINGS = {
     "ENGINE": os.environ.get('RCA_DB_ENGINE', 'Elasticsearch'),
-    "URL": os.environ.get('RCA_DB_URL'),
+    "URL": os.environ.get('RCA_DB_URL', '127.0.0.1'),
     "PORT": os.environ.get('RCA_DB_PORT', '9200'),
     "DATAFORMAT": os.environ.get('RCA_DB_DATAFORMAT', 'OpenTracing')
 }
