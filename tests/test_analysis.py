@@ -64,6 +64,40 @@ class TestFollowsFromRelation(unittest.TestCase):
             assert len(strands) == 2, 'There should be exactly 2 failure strands recognized'
 
 
+class TestChildOfRelation(unittest.TestCase):
+    """Checks if the ChildOf Relations are correctly analyzed."""
+
+    def test(self):
+        """Runs the test."""
+        rules = get_rules()
+
+        parser = get_parser()
+        data = ""
+        testdata_path = os.path.join(cwd, "tests/test_child_of.json")
+        with open(testdata_path, 'r') as f:
+            data = json.loads(f.read())
+
+        traces_raw = parser.parse_spans(data)      
+        traces = []
+
+        for trace_id, spans in traces_raw.items():
+            traces.append(Trace(trace_id, spans))
+
+        for trace in traces:
+            for span in trace.spans:
+                for rule in rules:
+                    rule.perform(span)
+                
+            trace.set_error_count()
+
+            get_root_cause(trace.root_span)
+
+            strands = [[span.span_id for span in strand] for strand in trace.get_error_strands()]
+
+            assert ['1.2', '1.1'] in strands, ''
+            assert ['1.3', '1.4'] in strands, ''
+            assert len(strands) == 2, 'There should be exactly 2 failure strands recognized'
+
 
 if __name__ == '__main__':
     unittest.main()

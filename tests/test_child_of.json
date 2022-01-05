@@ -1,0 +1,299 @@
+[{
+        "traceID": "1",
+        "spanID": "1.0",
+        "flags": 1,
+        "operationName": "F5",
+        "references": [],
+        "startTime": 1638815067374252,
+        "startTimeMillis": 1638815067374,
+        "duration": 1613,
+        "tags": [
+            { "key": "span.kind", "type": "string", "value": "client" },
+            { "key": "error", "type": "bool", "value": "false" }
+        ],
+        "logs": [],
+        "process": {
+            "serviceName": "api",
+            "tags": [{
+                    "key": "jaeger.version",
+                    "type": "string",
+                    "value": "Python-4.8.0"
+                },
+                {
+                    "key": "ip",
+                    "type": "string",
+                    "value": "172.18.0.13"
+                },
+                {
+                    "key": "hostname",
+                    "type": "string",
+                    "value": "api"
+                }
+            ]
+        }
+    },
+    {
+        "traceID": "1",
+        "spanID": "1.1",
+        "flags": 1,
+        "operationName": "F2",
+        "references": [{
+            "refType": "CHILD_OF",
+            "traceID": "1",
+            "spanID": "1.0"
+        }],
+        "startTime": 1638815067374252,
+        "startTimeMillis": 1638815067374,
+        "duration": 1613,
+        "tags": [
+            { "key": "span.kind", "type": "string", "value": "client" },
+            { "key": "error", "type": "bool", "value": "true" }
+        ],
+        "logs": [{
+            "timestamp": 1638894975032042,
+            "fields": [{
+                    "key": "event",
+                    "type": "string",
+                    "value": "error"
+                },
+                {
+                    "key": "message",
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "key": "error.object",
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "key": "error.kind",
+                    "type": "string",
+                    "value": "<class 'requests.exceptions.ConnectionError'>"
+                },
+                {
+                    "key": "stack",
+                    "type": "string",
+                    "value": "abc"
+                }
+            ]
+        }],
+        "process": {
+            "serviceName": "api",
+            "tags": [{
+                    "key": "jaeger.version",
+                    "type": "string",
+                    "value": "Python-4.8.0"
+                },
+                {
+                    "key": "ip",
+                    "type": "string",
+                    "value": "172.18.0.13"
+                },
+                {
+                    "key": "hostname",
+                    "type": "string",
+                    "value": "api"
+                }
+            ]
+        }
+    },
+    {
+        "traceID": "1",
+        "spanID": "1.2",
+        "flags": 1,
+        "operationName": "F1",
+        "references": [{
+            "refType": "CHILD_OF",
+            "traceID": "1",
+            "spanID": "1.1"
+        }],
+        "startTime": 1638815067374252,
+        "startTimeMillis": 1638815067374,
+        "duration": 1613,
+        "tags": [
+            { "key": "span.kind", "type": "string", "value": "client" },
+            { "key": "error", "type": "bool", "value": "true" }
+        ],
+        "logs": [{
+            "timestamp": 1638894975032040,
+            "fields": [{
+                    "key": "event",
+                    "type": "string",
+                    "value": "error"
+                },
+                {
+                    "key": "message",
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "key": "error.object",
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "key": "error.kind",
+                    "type": "string",
+                    "value": "<class 'requests.exceptions.ConnectionError'>"
+                },
+                {
+                    "key": "stack",
+                    "type": "string",
+                    "value": "abc"
+                }
+            ]
+        }],
+        "process": {
+            "serviceName": "api",
+            "tags": [{
+                    "key": "jaeger.version",
+                    "type": "string",
+                    "value": "Python-4.8.0"
+                },
+                {
+                    "key": "ip",
+                    "type": "string",
+                    "value": "172.18.0.13"
+                },
+                {
+                    "key": "hostname",
+                    "type": "string",
+                    "value": "api"
+                }
+            ]
+        }
+    },
+    {
+        "traceID": "1",
+        "spanID": "1.3",
+        "flags": 1,
+        "operationName": "F3",
+        "references": [{
+            "refType": "CHILD_OF",
+            "traceID": "1",
+            "spanID": "1.0"
+        }],
+        "startTime": 1638815067374252,
+        "startTimeMillis": 1638815067374,
+        "duration": 1613,
+        "tags": [
+            { "key": "span.kind", "type": "string", "value": "client" },
+            { "key": "error", "type": "bool", "value": "true" }
+        ],
+        "logs": [{
+            "timestamp": 1638894975032052,
+            "fields": [{
+                    "key": "event",
+                    "type": "string",
+                    "value": "error"
+                },
+                {
+                    "key": "message",
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "key": "error.object",
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "key": "error.kind",
+                    "type": "string",
+                    "value": "<class 'requests.exceptions.ConnectionError'>"
+                },
+                {
+                    "key": "stack",
+                    "type": "string",
+                    "value": "abc"
+                }
+            ]
+        }],
+        "process": {
+            "serviceName": "api",
+            "tags": [{
+                    "key": "jaeger.version",
+                    "type": "string",
+                    "value": "Python-4.8.0"
+                },
+                {
+                    "key": "ip",
+                    "type": "string",
+                    "value": "172.18.0.13"
+                },
+                {
+                    "key": "hostname",
+                    "type": "string",
+                    "value": "api"
+                }
+            ]
+        }
+    },
+    {
+        "traceID": "1",
+        "spanID": "1.4",
+        "flags": 1,
+        "operationName": "F4",
+        "references": [{
+            "refType": "CHILD_OF",
+            "traceID": "1",
+            "spanID": "1.3"
+        }],
+        "startTime": 1638815067374252,
+        "startTimeMillis": 1638815067374,
+        "duration": 1613,
+        "tags": [
+            { "key": "span.kind", "type": "string", "value": "client" },
+            { "key": "error", "type": "bool", "value": "true" }
+        ],
+        "logs": [{
+            "timestamp": 1638894975032053,
+            "fields": [{
+                    "key": "event",
+                    "type": "string",
+                    "value": "error"
+                },
+                {
+                    "key": "message",
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "key": "error.object",
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "key": "error.kind",
+                    "type": "string",
+                    "value": "<class 'requests.exceptions.ConnectionError'>"
+                },
+                {
+                    "key": "stack",
+                    "type": "string",
+                    "value": "abc"
+                }
+            ]
+        }],
+        "process": {
+            "serviceName": "api",
+            "tags": [{
+                    "key": "jaeger.version",
+                    "type": "string",
+                    "value": "Python-4.8.0"
+                },
+                {
+                    "key": "ip",
+                    "type": "string",
+                    "value": "172.18.0.13"
+                },
+                {
+                    "key": "hostname",
+                    "type": "string",
+                    "value": "api"
+                }
+            ]
+        }
+    }
+]
