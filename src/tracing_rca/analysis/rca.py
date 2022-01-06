@@ -10,10 +10,12 @@ logger.setLevel(logging.DEBUG)
 
 def resolve_cause_relation(span_caused, span_effected):
     """Sets pointers for caused and caused_by references."""
-    if not span_caused.caused:
-        span_caused.caused = span_effected
-    if not span_effected.caused_by:
-        span_effected.caused_by = span_caused
+    tmp = span_effected.caused_by
+    span_caused.caused = span_effected
+    span_effected.caused_by = span_caused
+    if tmp:
+        tmp.caused = span_caused
+        span_caused.caused_by = tmp
 
 def rating_hierarchy_level(span):
     """Rates the errors in one hierarchy level."""
