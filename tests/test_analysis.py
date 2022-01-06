@@ -59,6 +59,9 @@ class TestFollowsFromRelation(unittest.TestCase):
 
             strands = [[span.span_id for span in strand] for strand in trace.get_error_strands()]
 
+            sorted_rating = sorted(trace.spans, key=lambda span: span.rating, reverse=True)
+            assert sorted_rating[0] == '1.0'
+
             assert ['1.2'] in strands, 'Span 1.2 should be considered independent'
             assert ['1.0', '1.3', '1.1'] in strands, 'The other strands should be considered dependent'
             assert len(strands) == 2, 'There should be exactly 2 failure strands recognized'
@@ -93,6 +96,9 @@ class TestChildOfRelation(unittest.TestCase):
             get_root_cause(trace.root_span)
 
             strands = [[span.span_id for span in strand] for strand in trace.get_error_strands()]
+
+            sorted_rating = sorted(trace.spans, key=lambda span: span.rating, reverse=True)
+            assert sorted_rating[0] == '1.2'
 
             assert ['1.2', '1.1'] in strands, ''
             assert ['1.3', '1.4'] in strands, ''
