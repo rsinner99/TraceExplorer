@@ -4,7 +4,7 @@ This module provides an entrypoint for command-line based analysis of traces.
 
 import sys
 import logging
-from tracing_rca.analysis import read_csv_and_analyze
+from trace_explorer.analysis import read_csv_and_analyze
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

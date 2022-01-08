@@ -6,7 +6,7 @@ of the hierarchical span structure in html.
 import os
 from jinja2 import Environment, FileSystemLoader
 
-from tracing_rca.config import REPORT_DIR
+from trace_explorer.config import REPORT_DIR
 
 root = os.path.dirname(os.path.abspath(__file__))
 templates_dir = os.path.join(root, 'templates')

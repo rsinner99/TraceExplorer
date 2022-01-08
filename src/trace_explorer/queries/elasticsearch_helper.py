@@ -7,8 +7,8 @@ import logging
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
-from tracing_rca.config import DB_SETTINGS
-from tracing_rca.definitions import span
+from trace_explorer.config import DB_SETTINGS
+from trace_explorer.definitions import span
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

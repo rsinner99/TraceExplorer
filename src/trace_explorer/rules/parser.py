@@ -5,7 +5,7 @@ This module helps to parse and initialize all rules in the specified directory.
 import logging
 import json
 import os
-from tracing_rca.config import RULE_BASE_DIR
+from trace_explorer.config import RULE_BASE_DIR
 from .models import Rule, Condition, Action
 
 logger = logging.getLogger(__name__)

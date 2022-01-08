@@ -4,11 +4,11 @@ representation of the data to analyze.
 """
 import re
 
-from tracing_rca.definitions import tags, logs, http
-from tracing_rca.definitions import span as span_def
+from trace_explorer.definitions import tags, logs, http
+from trace_explorer.definitions import span as span_def
 
-from tracing_rca.queries import get_query
-from tracing_rca.parsers import get_parser
+from trace_explorer.queries import get_query
+from trace_explorer.parsers import get_parser
 
 class Span:
     """Represents a span within a trace which was produced by an E2E-Test"""

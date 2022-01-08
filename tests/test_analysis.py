@@ -2,10 +2,10 @@ import os
 import unittest
 import json
 
-from tracing_rca.parsers import get_parser
-from tracing_rca.analysis.models import Trace
-from tracing_rca.analysis.rca import get_root_cause
-from tracing_rca.rules.parser import get_rules
+from trace_explorer.parsers import get_parser
+from trace_explorer.analysis.models import Trace
+from trace_explorer.analysis.rca import get_root_cause
+from trace_explorer.rules.parser import get_rules
 
 cwd = os.getcwd()
 
