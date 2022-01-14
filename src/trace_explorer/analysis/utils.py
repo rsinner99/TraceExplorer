@@ -54,6 +54,20 @@ def analyze_traces(start_time, end_time, name, errors, failures, rules):
     return szenario
 
 
+def check_traces_and_exit(szenarios):
+    """
+    Checks if any trace contains an error.
+    Exit with status code 1 if an error was found.
+    Otherwise exit with status code 0.
+    """
+    try:
+        next(True for szen in szenarios if szen.traces_error_count)
+        logger.info('Detected at least one error in the traces.')
+        exit(1)
+    except StopIteration:
+        logger.info('No errors detected in the traces.')
+        exit(0)
+
 
 def read_csv_and_analyze():
     """Helper function to read csv and trigger analysis."""
@@ -63,3 +77,5 @@ def read_csv_and_analyze():
     for data in dataframe.values.tolist():
         szenarios.append(analyze_traces(data[0], data[1], data[2], data[3], data[4], rules))
     create_szenario_html(szenarios)
+
+    check_traces_and_exit(szenarios)

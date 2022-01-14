@@ -276,6 +276,7 @@ class Szenario:
         self.errors = errors
         self.failures = failures
         self.traces = []
+        self.traces_error_count = 0
 
     def __dict__(self):
         traces_with_error = [trace.__dict__() for trace in self.traces if trace.error_count > 0]
@@ -293,6 +294,7 @@ class Szenario:
     def add_trace(self, trace: Trace):
         """Adding a trace to the list of traces in the szenario."""
         self.traces.append(trace)
+        self.traces_error_count += trace.error_count
 
     def has_error(self):
         return not bool(re.match(r'^\[\]$', self.errors))
