@@ -10,6 +10,8 @@ from trace_explorer.definitions import span as span_def
 from trace_explorer.queries import get_query
 from trace_explorer.parsers import get_parser
 
+from .clock_skew import adjust_clock_skew
+
 class Span:
     """Represents a span within a trace which was produced by an E2E-Test"""
 
@@ -33,6 +35,7 @@ class Span:
         self.previous = None # reference to previous span in same hierarchy level
         self.type = span_def.SPAN_TYPE_ROOT # either root, child or follower
         self.stack = None
+        self.cause_timestamp = None
         self.cause = self.get_possible_root_cause()
         self.rating = 0 # integer rating for root-cause propability
         self.caused = None
@@ -87,6 +90,7 @@ class Span:
         if isinstance(parent, Span):
             if self.parent is None:
                 self.parent = parent
+                adjust_clock_skew(parent, self)
             else:
                 raise ValueError('Circular dependency detected')
         else:
@@ -114,13 +118,13 @@ class Span:
                 self.logs
             )
         )
-        sorted_list = sorted(only_errors, key=lambda log: log['timestamp'])
+        sorted_list = sorted(only_errors, key=lambda log: log[logs.TIMESTAMP])
         if len(sorted_list) > 0:
-            self.cause_timestamp = sorted_list[0]['timestamp']
-            log_fields = sorted_list[0]['fields']
-            self.stack = log_fields.get('stack', None)
-            return log_fields.get('error.object') \
-                if log_fields.get('error.object') else log_fields.get('message')
+            self.cause_timestamp = sorted_list[0][logs.TIMESTAMP]
+            log_fields = sorted_list[0][logs.FIELDS]
+            self.stack = log_fields.get(logs.FIELD_STACK, None)
+            return log_fields.get(logs.FIELD_ERROR_OBJECT) \
+                if log_fields.get(logs.FIELD_ERROR_OBJECT) else log_fields.get(logs.FIELD_MESSAGE)
 
         return None
 
