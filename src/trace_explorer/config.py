@@ -21,3 +21,5 @@ RULE_BASE_DIR = os.path.join(root, os.environ.get('RCA_RULE_DIR', 'rules/rules')
 CSV_PATH = os.path.join(cwd, os.environ.get('RCA_CSV_PATH', ''))
 
 REPORT_DIR = os.path.join(cwd, os.environ.get('RCA_REPORT_DIR', ''))
+
+MAX_CLOCK_DEVIATION = float(os.environ.get('RCA_MAX_CLOCK_DEVIATION', '0.0'))

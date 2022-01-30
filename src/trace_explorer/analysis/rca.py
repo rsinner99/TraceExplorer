@@ -4,8 +4,24 @@ This module implements the actual root cause analysis of the tracing data.
 
 import logging
 
+from trace_explorer.config import MAX_CLOCK_DEVIATION
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+def compare_log_timestamps(span_a, span_b):
+    """
+    Calculates the diff between two timestamps.
+    If the diff is below a user defined limit,
+    the cause of the failure cannot be determined.
+    Both spans get rated the same if that happens.
+    """
+    diff = abs(span_a.cause_timestamp - span_b.cause_timestamp)
+    if diff < MAX_CLOCK_DEVIATION:
+        logger.warning(f'Error interval of {diff} microseconds is below user defined limit of {MAX_CLOCK_DEVIATION} microseconds. No reliable analysis possible for those errors."')
+        sum = span_a.rating + span_b.rating
+        span_a.rating = sum / 2
+        span_b.rating = sum / 2
 
 
 def resolve_cause_relation(span_caused, span_effected):
@@ -25,7 +41,8 @@ def rating_hierarchy_level(span):
                 if child.start_time > child.previous.end_time:
                     resolve_cause_relation(child.previous, child)
                     child.previous.rating += 1
-
+                    # if timestamps are too close, both spans get rated the same
+                    compare_log_timestamps(child.previous, child)
 
 def get_root_cause(parent):
     """Recursive function for rating the errors in a hierachical span structure."""
@@ -50,6 +67,9 @@ def get_root_cause(parent):
                         logger.debug('Both (+1) - %s & %s', parent.span_id, child.span_id)
                         child.rating += 1
                         parent.rating += 1
+                # if timestamps are too close, both spans get rated higher
+                compare_log_timestamps(child, parent)
+
             elif child.error:
                 logger.debug('Only child (+1) - %s', child.span_id)
                 child.rating +=1
