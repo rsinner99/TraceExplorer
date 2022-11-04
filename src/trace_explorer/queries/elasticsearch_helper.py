@@ -13,17 +13,10 @@ from trace_explorer.definitions import span
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-es = Elasticsearch(
-    [DB_SETTINGS.get('URL')],
-    scheme="http",
-    port=DB_SETTINGS.get('PORT'),
-)
 
-BASE_URL = 'http://' + DB_SETTINGS.get('URL') + ':' + DB_SETTINGS.get('PORT') + '/'
-SEARCH_URL = "_search?pretty"
-HEADERS = {
-    "Content-Type": "application/json"
-}
+BASE_URL = f"http://{DB_SETTINGS.get('URL')}:{DB_SETTINGS.get('PORT')}"
+es = Elasticsearch(BASE_URL)
+
 
 def get_span_query(gte: int, lte: int):
     """Return an es-query for all spans in the time range."""
