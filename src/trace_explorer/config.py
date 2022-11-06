@@ -11,7 +11,7 @@ DB_SETTINGS = {
     "ENGINE": os.environ.get('RCA_DB_ENGINE', 'Elasticsearch'),
     "URL": os.environ.get('RCA_DB_URL', '127.0.0.1'),
     "PORT": os.environ.get('RCA_DB_PORT', '9200'),
-    "DATAFORMAT": os.environ.get('RCA_DB_DATAFORMAT', 'OpenTracing')
+    "DATAFORMAT": os.environ.get('RCA_DB_DATAFORMAT', 'OpenTelemetry')
 }
 
 JSON_SCHEMA_PATH = os.path.join(root, os.environ.get('RCA_SCHEMA_PATH', 'schemas/schema.json'))

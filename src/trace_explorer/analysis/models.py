@@ -73,7 +73,9 @@ class Span:
 
     def has_error(self):
         """Checks wheter the span contains an error or not."""
-        if self.tags.get(tags.ERROR_KEY):
+        # sometimes a span has errors but no logs
+        # we cannot analyze them, so we ignore the error.
+        if self.tags.get(tags.ERROR_KEY) and self.logs:
             return True
         if self.tags.get(tags.HTTP_STATUS_CODE_KEY) == http.STATUS_500:
             if not self.cause:
