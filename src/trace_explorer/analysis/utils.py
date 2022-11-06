@@ -71,6 +71,7 @@ def check_traces_and_exit(szenarios):
 
 def read_csv_and_analyze():
     """Helper function to read csv and trigger analysis."""
+    logger.debug("Reading szenario information from csv.")
     szenarios = []
     rules = get_rules()
     dataframe = pd.read_csv(config.CSV_PATH, sep=';')
@@ -78,4 +79,13 @@ def read_csv_and_analyze():
         szenarios.append(analyze_traces(data[0], data[1], data[2], data[3], data[4], rules))
     create_szenario_html(szenarios)
 
+    check_traces_and_exit(szenarios)
+
+
+def analyze_custom_time_range(start_time, end_time, name):
+    """Helper function to use custom start and end time to trigger analysis."""
+    logger.debug("Reading szenario information from command line.")
+    rules = get_rules()
+    szenarios = [analyze_traces(start_time, end_time, name, "", "", rules)]
+    create_szenario_html(szenarios)
     check_traces_and_exit(szenarios)
