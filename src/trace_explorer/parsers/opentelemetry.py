@@ -6,7 +6,7 @@ import json
 from jsonschema import validate as validate_json
 
 from trace_explorer.config import JSON_SCHEMA_PATH
-from trace_explorer.definitions import logs
+from trace_explorer.definitions import logs, span as span_def
 
 RELEVANT_KEYS = ['operationName', 'references', 'startTime', 'duration', ]
 
@@ -36,6 +36,24 @@ def get_list_of_logs(logs):
         })
     return result
 
+def extract_error_logs_from_tags(span_data):
+    log_data = []
+    log_fields = {}
+    tags = span_data[span_def.TAGS]
+    if tags.get('otel.status_code'):
+        log_fields[logs.FIELD_EVENT] = tags['otel.status_code'].lower()
+    if tags.get('otel.status_description'):
+        log_fields[logs.FIELD_STACK] = tags['otel.status_description']
+        # last line of stacktrace is the exception
+        log_fields[logs.FIELD_MESSAGE] = log_fields[logs.FIELD_STACK][-1]
+    if log_fields:
+        log_data.append({
+            logs.FIELDS: log_fields,
+            # set timestamp to end of trace, because we don´t know anything better
+            logs.TIMESTAMP: span_data[span_def.START_TIME] + span_data[span_def.DURATION]
+        })
+    return log_data
+
 def validate(span_data):
     """Validates a span representation with a given JSON-Schema"""
     with open(JSON_SCHEMA_PATH, 'r', encoding="utf-8") as file:
@@ -53,6 +71,9 @@ def extract_span_data(data):
         error = json.loads(error.lower())
     result['tags']['error'] = error
     result['logs'] = get_list_of_logs(data.get('logs'))
+    if error and not result['logs']:
+        # check if we can get error information from somewhere else
+        result['logs'] = extract_error_logs_from_tags(result)
     validate(result)
     return result
 
