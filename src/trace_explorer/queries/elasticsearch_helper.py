@@ -98,7 +98,7 @@ def remove_elasticsearch_metadata(data):
 
         spans = hits.get('hits')
         for span in spans:
-            if span.get('_type') != 'span':
+            if span.get('_type') not in ['span', '_doc']:
                 raise Exception('Dataset is of type: "' + span.get('_type') + '", not "span"')
             source = span.get('_source')
             result.append(source)
@@ -119,6 +119,8 @@ def get_spans_in_range(start: int, end: int):
     )
     sid = page['_scroll_id']
     scroll_size = page['hits']['total']
+    if isinstance(scroll_size, dict):
+        scroll_size = scroll_size['value']
 
     result = [page]
     # Start scrolling
