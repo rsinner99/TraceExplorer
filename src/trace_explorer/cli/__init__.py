@@ -9,8 +9,7 @@ import math
 import time
 from datetime import timedelta
 from argparse import ArgumentParser
-from tracemalloc import start
-from trace_explorer.analysis import read_csv_and_analyze, analyze_custom_time_range
+from ..analysis import read_csv_and_analyze, analyze_custom_time_range
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -38,18 +37,19 @@ def prepare_args():
 
 def get_timedelta(value):
     kwargs = {}
-    m = re.match(r'(\d+)(s|m|h)', value)
-    if not m:
+    matches = re.findall(r'(\d+)(s|m|h)', value)
+    if len(matches) == 0:
         logger.error(f"Invalid format for time: '{value}'")
-        sys.exit(-1)
-    unit = m.group(2)
-    value = int(m.group(1))
-    if unit == 's':
-        kwargs['seconds'] = value
-    elif unit == 'm':
-        kwargs['minutes'] = value
-    elif unit == 'h':
-        kwargs['hours'] = value
+        raise Exception("Time format cannot be parsed")
+    for m in matches:
+        unit = m[1]
+        value = int(m[0])
+        if unit == 's':
+            kwargs['seconds'] = value
+        elif unit == 'm':
+            kwargs['minutes'] = value
+        elif unit == 'h':
+            kwargs['hours'] = value
     return timedelta(**kwargs).total_seconds() * 1e6 # microseconds
 
 

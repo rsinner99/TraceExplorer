@@ -30,6 +30,7 @@ def create_trace_html(traces):
 def create_szenario_html(szenarios):
     """Creates a file with szenarios details."""
     result = [szenario.__dict__() for szenario in szenarios]
+    os.makedirs(REPORT_DIR, exist_ok=True)
     filename = os.path.join(REPORT_DIR, 'index.html')
     template = env.get_template('szenarios.html')
     output = template.render(szenarios=result)

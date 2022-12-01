@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Archived{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<table style="margin-left: 20px;" border="1">
+  <!-- Table headers -->
+      <th>
+          <tr style="color: green; ">    
+            <td>Name</td>
+            <td>Action</td>
+          </tr>
+      </th>
+<!-- For loop logic of jinja template -->
+{%for i in range(0, len)%}
+  
+<!-- table rows -->
+<tr>
+    <td><a href="/report/{{files[i]}}/index.html">{{files[i]}}</a></td>
+    <td><a href="/delete/{{files[i]}}">Delete</a></td>
+{%endfor%}
+  
+</tr>
+  
+</table>
+{% endblock %}

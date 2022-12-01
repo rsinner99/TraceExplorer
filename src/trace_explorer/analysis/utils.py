@@ -63,10 +63,10 @@ def check_traces_and_exit(szenarios):
     try:
         next(True for szen in szenarios if szen.traces_error_count)
         logger.info('Detected at least one error in the traces.')
-        exit(1)
+        return 1
     except StopIteration:
         logger.info('No errors detected in the traces.')
-        exit(0)
+        return 0
 
 
 def read_csv_and_analyze():
@@ -79,7 +79,8 @@ def read_csv_and_analyze():
         szenarios.append(analyze_traces(data[0], data[1], data[2], data[3], data[4], rules))
     create_szenario_html(szenarios)
 
-    check_traces_and_exit(szenarios)
+    result = check_traces_and_exit(szenarios)
+    exit(result)
 
 
 def analyze_custom_time_range(start_time, end_time, name):

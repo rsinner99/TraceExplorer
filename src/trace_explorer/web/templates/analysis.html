@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Analysis{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input name="name" id="name" placeholder="Name" required>
+    <label for="start">Start</label>
+    <input name="start" id="start" placeholder="1h/2m/3s" required>
+    <label for="end">End</label>
+    <input name="end" id="end" placeholder="1h/2m/3s">
+    <input type="submit" value="Analyze">
+  </form>
+{% endblock %}
