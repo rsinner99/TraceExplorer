@@ -83,10 +83,24 @@ def read_csv_and_analyze():
     exit(result)
 
 
-def analyze_custom_time_range(start_time, end_time, name):
+def analyze_custom_time_range(data):
     """Helper function to use custom start and end time to trigger analysis."""
     logger.debug("Reading szenario information from command line.")
     rules = get_rules()
-    szenarios = [analyze_traces(start_time, end_time, name, "", "", rules)]
+    szenarios = []
+    for entry in data:
+        start_time = entry['start_time']
+        end_time = entry['end_time']
+        name = entry['name']
+        szenarios.append(
+            analyze_traces(
+                start_time,
+                end_time,
+                name,
+                "",
+                "",
+                rules
+            )
+        )
     create_szenario_html(szenarios)
     check_traces_and_exit(szenarios)

@@ -76,6 +76,11 @@ def main():
             end_time = current
 
         name = f"CustomSzenario - {current}"
-        analyze_custom_time_range(start_time, end_time, name)
+        data = [{
+            "start_time": start_time,
+            "end_time": end_time,
+            "name": name
+        }]
+        analyze_custom_time_range(data)
 
     read_csv_and_analyze()

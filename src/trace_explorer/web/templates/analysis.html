@@ -2,16 +2,66 @@
 
 {% block header %}
   <h1>{% block title %}Analysis{% endblock %}</h1>
+
+  <script>
+    window.onload = function() {
+        let addSzenarioFieldButton = document.getElementById('add-szenario-field');
+        addSzenarioFieldButton.addEventListener('click', function(e){
+            e.preventDefault();
+            let allSzenariosFieldWrapper = document.getElementById('szenario');
+            let allSzenariosField = allSzenariosFieldWrapper.getElementsByTagName('input');
+            if(allSzenariosField.length > 19) {
+                alert('You can  have only 20 szenarios');
+                return;
+            }
+            let szenarioInputIds = []
+            for(let i = 0; i < allSzenariosField.length; i++) {
+                szenarioInputIds.push(parseInt(allSzenariosField[i].name.split('-')[1]));
+            }
+            let newFieldSzenario = `szenario-${Math.max(...szenarioInputIds) + 1}`;
+            let newFieldName = `szenario-${Math.max(...szenarioInputIds) + 1}-name`;
+            let newFieldStart = `szenario-${Math.max(...szenarioInputIds) + 1}-start`;
+            let newFieldEnd = `szenario-${Math.max(...szenarioInputIds) + 1}-end`;
+            allSzenariosFieldWrapper.insertAdjacentHTML('beforeend',`
+            <li><label for="${newFieldSzenario}">${newFieldSzenario}</label>
+              <table id="${newFieldSzenario}">
+                <tr>
+                  <th>
+                    <label for="${newFieldName}">Name</label>
+                  </th>
+                  <td>
+                    <input id="${newFieldName}" name="${newFieldName}" type="text" value="">
+                  </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <label for="${newFieldStart}">Start time</label>
+                    </th>
+                    <td>
+                      <input id="${newFieldStart}" name="${newFieldStart}" required type="text" value="">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      <label for="${newFieldEnd}">End time</label>
+                    </th>
+                    <td>
+                      <input id="${newFieldEnd}" name="${newFieldEnd}" type="text" value="">
+                    </td>
+                  </tr>
+                </table>
+              </li>
+            `);
+        });
+    }
+</script>
 {% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="name">Name</label>
-    <input name="name" id="name" placeholder="Name" required>
-    <label for="start">Start</label>
-    <input name="start" id="start" placeholder="1h/2m/3s" required>
-    <label for="end">End</label>
-    <input name="end" id="end" placeholder="1h/2m/3s">
-    <input type="submit" value="Analyze">
-  </form>
+<form method="POST" action="">
+  {{ form.csrf_token }}
+  {{form.szenario.label}}
+  {{ form.szenario() }} <br>
+  <button type="submit">Start analysis</button>
+  <button id="add-szenario-field">Add item</button>
 {% endblock %}
