@@ -3,8 +3,9 @@ import time
 
 from flask import (
     Blueprint, redirect, render_template,
-    request, flash, url_for, send_from_directory
+    request, flash, url_for, send_from_directory, abort
 )
+from elasticsearch import exceptions as es_exceptions
 
 from trace_explorer.analysis import analyze_custom_time_range
 from trace_explorer.cli import get_timedelta
@@ -16,20 +17,20 @@ from .forms import SzenarioListForm
 bp = Blueprint('web', __name__, url_prefix='')
 
 
-@bp.route('/', methods=('GET',))
+@bp.route('/files', methods=('GET',))
 def list_files():
     files = get_all_files()
     return render_template('files.html', len=len(files), files=files)
 
 
-@bp.route('/', methods=('GET',))
+#@bp.route('/', methods=('GET',))
 @bp.route('/delete/<path:path>', methods=('GET',))
 def delete_file(path):
     delete_dir(path)
     return redirect(url_for('web.list_files'))
 
 
-@bp.route('/analysis', methods=('GET', 'POST'))
+@bp.route('/', methods=('GET', 'POST'))
 def analysis():
     form  = SzenarioListForm()
     if form.validate_on_submit():
@@ -39,8 +40,6 @@ def analysis():
             name = szenario.name
             start = szenario.start.data
             end = szenario.end.data
-            if not name:
-                name = f"CustomSzenario - {current}"
             if not start:
                 error = "Start time is missing."
 
@@ -53,9 +52,14 @@ def analysis():
                     end_time = current - end_delta
                 else:
                     end_time = current
+            except es_exceptions.NotFoundError:
+                return abort(404)
             except Exception as e:
                 error = str(e)
-                raise e
+                #raise e
+            
+            if not name:
+                name = f"CustomSzenario - {current}"
 
             if error:
                 flash(error)
