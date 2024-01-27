@@ -63,9 +63,16 @@ def validate(span_data):
 def extract_span_data(data):
     """Extractes all relevant span data and formats it."""
     result = dict((k, data[k]) for k in RELEVANT_KEYS)
-    result['service'] = get_key_value_from_tags(data.get('process').get('tags'))
-    result['service']['name'] = data.get('process').get('serviceName')
-    result['tags'] = get_key_value_from_tags(data.get('tags'))
+    #if 'process' not in data.keys():
+    #    process = data['processes'].keys()[0]
+    #    result['service'] = [data['process'][process]['serviceName']] # jaeger query
+    #else:
+    result['service'] = get_key_value_from_tags(data.get('process', {}).get('tags', [])) #es
+    result['tags'] = get_key_value_from_tags(data.get('tags', []))
+    if not "process" in data.keys():
+        result['service']['name'] = data.get('process', {}).get('serviceName', "unknown")
+    else:
+        result['service']['name'] = data.get('processes', {}).get('serviceName', "unknown")
     error = result['tags'].get('error', False)
     if isinstance(error, str):
         error = json.loads(error.lower())
@@ -80,9 +87,11 @@ def extract_span_data(data):
 def parse_spans(spans):
     """Parsers a list of spans and transforms them into the excpeted format."""
     result = {}
-    for span in spans:
-        if not span.get('traceID') in result:
-            result[span.get('traceID')] = {}
-        span_id = span.pop('spanID')
-        result[span.get('traceID')][span_id] = extract_span_data(span)
+    print(spans)
+    for traceID, span_list in spans.items():
+        if traceID not in result.keys():
+            result[traceID] = {}
+        for span in span_list:
+            span_id = span.pop('spanID')
+            result[traceID][span_id] = extract_span_data(span)
     return result

@@ -68,7 +68,7 @@ def main():
     if args.start:
         current = math.ceil(time.time_ns() / 1e3) # microseconds: rounded up
         start_delta = get_timedelta(args.start)
-        start_time = current - start_delta
+        start_time = current - int(start_delta)
         if args.end:
             end_delta = get_timedelta(args.end)
             end_time = current - end_delta
@@ -83,4 +83,6 @@ def main():
         }]
         analyze_custom_time_range(data)
 
-    read_csv_and_analyze()
+
+if __name__ == "__main__":
+    main()
